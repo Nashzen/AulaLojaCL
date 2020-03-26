@@ -14,7 +14,7 @@ namespace LojaCL
     
     public partial class FrmVenda : Form
     {
-        SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\leo-s\\source\\repos\\LojaChingLing-master\\DbLoja.mdf;Integrated Security=True;Connect Timeout=30");
+        SqlConnection con = Conexao.obterConexao();
         public FrmVenda()
         {
             InitializeComponent();
@@ -231,11 +231,11 @@ namespace LojaCL
 
         private void txtQuantidade_Leave(object sender, EventArgs e)
         {
+            SqlConnection con = Conexao.obterConexao();
             if (con.State == ConnectionState.Open)
             {
                 con.Close();
             }
-            con.Open();
             SqlCommand cmd = new SqlCommand("LocalizarProduto", con);
             cmd.Parameters.AddWithValue("@Id", cbxProduto.SelectedValue);
             cmd.CommandType = CommandType.StoredProcedure;

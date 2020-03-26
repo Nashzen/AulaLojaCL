@@ -10,12 +10,12 @@ namespace LojaCL
 {
     public class Conexao
     {
-        private static string str = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\leo-s\\source\\repos\\LojaChingLing-master\\DbLoja.mdf;Integrated Security=True;Connect Timeout=30";
+        private static string str = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\leo-s\\source\\repos\\LojaChingLing-master\\DbLoja.mdf;Integrated Security=True;MultipleActiveResultSets=true;Connect Timeout=30";
         private static SqlConnection con = null;
 
         public static SqlConnection obterConexao()
         {
-            con = new SqlConnection(str);
+            SqlConnection con = new SqlConnection(str);
 
             if (con.State == ConnectionState.Open)
             {
