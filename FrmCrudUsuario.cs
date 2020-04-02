@@ -13,7 +13,6 @@ namespace LojaCL
 {
     public partial class FrmCrudUsuario : Form
     {
-        SqlConnection con = Conexao.obterConexao();
         public FrmCrudUsuario()
         {
             InitializeComponent();
@@ -21,15 +20,16 @@ namespace LojaCL
 
         public void CarregaDgvUsuario()
         {
+            SqlConnection con = clConexao.obterConexao();
             String query = "select * from usuario";
             SqlCommand cmd = new SqlCommand(query, con);
-            Conexao.obterConexao();
+            clConexao.obterConexao();
             cmd.CommandType = CommandType.Text;
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable produto = new DataTable();
             da.Fill(produto);
             DgvUsuario.DataSource = produto;
-            Conexao.fecharConexao();
+            clConexao.fecharConexao();
         }
 
         private void btnSair_Click(object sender, EventArgs e)
@@ -48,11 +48,11 @@ namespace LojaCL
                 cmd.Parameters.AddWithValue("@nome", txtNome.Text);
                 cmd.Parameters.AddWithValue("@login", txtLogin.Text);
                 cmd.Parameters.AddWithValue("@senha", txtSenha.Text);
-                Conexao.obterConexao();
+                clConexao.obterConexao();
                 cmd.ExecuteNonQuery();
                 CarregaDgvUsuario();
                 MessageBox.Show("Registro inserido com sucesso!", "Cadastro", MessageBoxButtons.OK);
-                Conexao.fecharConexao();
+                clConexao.fecharConexao();
                 txtId.Text = "";
                 txtNome.Text = "";
                 txtLogin.Text = "";
@@ -68,7 +68,7 @@ namespace LojaCL
         {
             try
             {
-                SqlConnection con = Conexao.obterConexao();
+                SqlConnection con = clConexao.obterConexao();
                 SqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "AtualizarUsuario";
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -76,11 +76,11 @@ namespace LojaCL
                 cmd.Parameters.AddWithValue("@nome", this.txtNome.Text);
                 cmd.Parameters.AddWithValue("@login", this.txtLogin.Text);
                 cmd.Parameters.AddWithValue("@senha", this.txtSenha.Text);
-                Conexao.obterConexao();
+                clConexao.obterConexao();
                 cmd.ExecuteNonQuery();
                 CarregaDgvUsuario();
                 MessageBox.Show("Registro atualizado com sucesso!", "Atualizar Registro", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Conexao.fecharConexao();
+                clConexao.fecharConexao();
                 txtId.Text = "";
                 txtNome.Text = "";
                 txtLogin.Text = "";
@@ -96,16 +96,16 @@ namespace LojaCL
         {
             try
             {
-                Conexao.obterConexao();
+                SqlConnection con = clConexao.obterConexao();
                 SqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "ExcluirUsuario";
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Id", this.txtId.Text);
-                Conexao.obterConexao();
+                clConexao.obterConexao();
                 cmd.ExecuteNonQuery();
                 CarregaDgvUsuario();
                 MessageBox.Show("Registro apagado com sucesso!", "Excluir Registro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                Conexao.fecharConexao();
+                clConexao.fecharConexao();
                 txtId.Text = "";
                 txtNome.Text = "";
                 txtLogin.Text = "";
@@ -121,12 +121,12 @@ namespace LojaCL
         {
             try
             {
-                Conexao.obterConexao();
+                SqlConnection con = clConexao.obterConexao();
                 SqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "LocalizarUsuario";
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Id", this.txtId.Text);
-                Conexao.obterConexao();
+                clConexao.obterConexao();
                 SqlDataReader rd = cmd.ExecuteReader();
                 if (rd.Read())
                 {
@@ -134,10 +134,12 @@ namespace LojaCL
                     txtNome.Text = rd["nome"].ToString();
                     txtLogin.Text = rd["login"].ToString();
                     txtSenha.Text = rd["senha"].ToString();
+                    clConexao.fecharConexao();
                 }
                 else
                 {
                     MessageBox.Show("Nenhum registro encontrado!", "Sem registro!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    clConexao.fecharConexao();
                 }
             }
             finally

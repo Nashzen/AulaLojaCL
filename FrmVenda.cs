@@ -11,10 +11,9 @@ using System.Data.SqlClient;
 
 namespace LojaCL
 {
-    
     public partial class FrmVenda : Form
     {
-        SqlConnection con = Conexao.obterConexao();
+        SqlConnection con = clConexao.obterConexao();
         public FrmVenda()
         {
             InitializeComponent();
@@ -24,7 +23,7 @@ namespace LojaCL
         {
             string cli = "select cpf, nome from cliente";
             SqlCommand cmd = new SqlCommand(cli, con);
-            con.Open();
+            clConexao.obterConexao();
             cmd.CommandType = CommandType.Text;
             SqlDataAdapter da = new SqlDataAdapter(cli, con);
             DataSet ds = new DataSet();
@@ -32,14 +31,14 @@ namespace LojaCL
             cbxCliente.ValueMember = "cpf";
             cbxCliente.DisplayMember = "nome";
             cbxCliente.DataSource = ds.Tables["nome"];
-            con.Close();
-        }
+            clConexao.fecharConexao();
+        } 
 
         public void CarregacbxProduto()
         {
             string pro = "select Id, nome from produto";
             SqlCommand cmd = new SqlCommand(pro, con);
-            con.Open();
+            clConexao.obterConexao();
             cmd.CommandType = CommandType.Text;
             SqlDataAdapter da = new SqlDataAdapter(pro, con);
             DataSet ds = new DataSet();
@@ -47,10 +46,10 @@ namespace LojaCL
             cbxProduto.ValueMember = "Id";
             cbxProduto.DisplayMember = "nome";
             cbxProduto.DataSource = ds.Tables["nome"];
-            con.Close();
+            clConexao.fecharConexao();
         }
-
-        private void btnSair_Click(object sender, EventArgs e)
+        
+         private void btnSair_Click(object sender, EventArgs e)
         {
             this.Close();
         }
@@ -76,7 +75,6 @@ namespace LojaCL
             cbxProduto.Enabled = true;
             txtQuantidade.Enabled = true;
             txtValor.Enabled = true;
-            //txtValorTotal.Enabled = true;
             btnNovoItem.Enabled = true;
             btnFinalizar.Enabled = true;
             btnEcluirItem.Enabled = true;
@@ -91,24 +89,21 @@ namespace LojaCL
 
         private void cbxProduto_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (con.State == ConnectionState.Open)
-            {
-                con.Close();
-            }
+            SqlConnection con = clConexao.obterConexao();
             SqlCommand cmd = new SqlCommand("LocalizarProduto", con);
             cmd.Parameters.AddWithValue("@Id", cbxProduto.SelectedValue);
             cmd.CommandType = CommandType.StoredProcedure;
-            con.Open();
+            clConexao.obterConexao();
             SqlDataReader rd = cmd.ExecuteReader();
             if (rd.Read())
             {
                 txtValor.Text = rd["valor"].ToString();
                 txtId.Text = rd["Id"].ToString();
-                con.Close();
-            }
-            else
+                clConexao.fecharConexao();
+            } else
             {
                 MessageBox.Show("Nenhum registro encontrado!", "Erro de Registro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                clConexao.fecharConexao();
             }
         }
 
@@ -173,11 +168,7 @@ namespace LojaCL
 
         private void btnFinalizar_Click(object sender, EventArgs e)
         {
-            if (con.State == ConnectionState.Open)
-            {
-                con.Close();
-            }
-            con.Open();
+            SqlConnection con = clConexao.obterConexao();
             SqlCommand cmd = new SqlCommand("InserirVenda", con);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@valor_pago", SqlDbType.Decimal).Value = Convert.ToDecimal(txtValor.Text);
@@ -201,15 +192,10 @@ namespace LojaCL
                 cmditens.Parameters.AddWithValue("@id_venda", SqlDbType.Int).Value = idvenda2;
                 cmditens.Parameters.AddWithValue("@valor", SqlDbType.Decimal).Value = Convert.ToDecimal(dr.Cells[3].Value);
                 cmditens.Parameters.AddWithValue("@valor_total", SqlDbType.Decimal).Value = Convert.ToDecimal(dr.Cells[4].Value);
-                if (con.State == ConnectionState.Open)
-                {
-                    //Fecho o banco de dados
-                    con.Close();
-                }
-                con.Open();
+                clConexao.obterConexao();
                 cmditens.ExecuteNonQuery();
                 cmditemvenda.ExecuteNonQuery();
-                con.Close();
+                clConexao.fecharConexao();
             }
             MessageBox.Show("Venda realizada com sucesso!", "Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
             cbxProduto.Text = "";
@@ -231,11 +217,7 @@ namespace LojaCL
 
         private void txtQuantidade_Leave(object sender, EventArgs e)
         {
-            SqlConnection con = Conexao.obterConexao();
-            if (con.State == ConnectionState.Open)
-            {
-                con.Close();
-            }
+            SqlConnection con = clConexao.obterConexao();
             SqlCommand cmd = new SqlCommand("LocalizarProduto", con);
             cmd.Parameters.AddWithValue("@Id", cbxProduto.SelectedValue);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -248,21 +230,11 @@ namespace LojaCL
                 if (valor1 > valor2)
                 {
                     MessageBox.Show("Não possui quantidade suficiente em estoque!", "Estoque", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    con.Close();
+                    clConexao.fecharConexao();
                     txtQuantidade.Text = "";
                     txtQuantidade.Focus();
                 }
             }
-        }
-
-        private void txtValor_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtValorTotal_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace LojaCL
 {
     public partial class FrmCrudCliente : Form
     {
-        SqlConnection con = Conexao.obterConexao();
         public FrmCrudCliente()
         {
             InitializeComponent();
@@ -15,16 +20,16 @@ namespace LojaCL
 
         public void CarregaDgvCliente()
         {
-            SqlConnection con = Conexao.obterConexao();
+            SqlConnection con = clConexao.obterConexao();
             String query = "select * from cliente";
             SqlCommand cmd = new SqlCommand(query, con);
-            Conexao.obterConexao();
+            clConexao.obterConexao();
             cmd.CommandType = CommandType.Text;
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable cliente = new DataTable();
             da.Fill(cliente);
             DgvCliente.DataSource = cliente;
-            Conexao.fecharConexao();
+            clConexao.fecharConexao();
         }
 
         private void btnSair_Click(object sender, EventArgs e)
@@ -36,7 +41,7 @@ namespace LojaCL
         {
             try
             {
-                SqlConnection con = Conexao.obterConexao();
+                SqlConnection con = clConexao.obterConexao();
                 SqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "Inserir";
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -45,11 +50,11 @@ namespace LojaCL
                 cmd.Parameters.AddWithValue("@endereco", txtEndereco.Text);
                 cmd.Parameters.AddWithValue("@celular", txtCelular.Text);
                 cmd.Parameters.AddWithValue("@email", txtEmail.Text);
-                Conexao.obterConexao();
+                clConexao.obterConexao();
                 cmd.ExecuteNonQuery();
                 CarregaDgvCliente();
                 MessageBox.Show("Registro inserido com sucesso!", "Cadastro", MessageBoxButtons.OK);
-                Conexao.fecharConexao();
+                clConexao.fecharConexao();
                 txtCpf.Text = "";
                 txtNome.Text = "";
                 txtEndereco.Text = "";
@@ -66,12 +71,12 @@ namespace LojaCL
         {
             try
             {
-                SqlConnection con = Conexao.obterConexao();
+                SqlConnection con = clConexao.obterConexao();
                 SqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "Localizar";
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@cpf", this.txtCpf.Text);
-                Conexao.obterConexao();
+                clConexao.obterConexao();
                 SqlDataReader rd = cmd.ExecuteReader();
                 if (rd.Read())
                 {
@@ -80,10 +85,12 @@ namespace LojaCL
                     txtEndereco.Text = rd["endereco"].ToString();
                     txtCelular.Text = rd["celular"].ToString();
                     txtEmail.Text = rd["email"].ToString();
+                    clConexao.fecharConexao();
                 }
                 else
                 {
                     MessageBox.Show("Nenhum registro encontrado!", "Sem registro!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    clConexao.fecharConexao();
                 }
             }
             finally
@@ -95,7 +102,7 @@ namespace LojaCL
         {
             try
             {
-                SqlConnection con = Conexao.obterConexao();
+                SqlConnection con = clConexao.obterConexao();
                 SqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "Atualizar";
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -104,11 +111,11 @@ namespace LojaCL
                 cmd.Parameters.AddWithValue("@endereco", this.txtEndereco.Text);
                 cmd.Parameters.AddWithValue("@celular", this.txtCelular.Text);
                 cmd.Parameters.AddWithValue("@email", this.txtEmail.Text);
-                Conexao.obterConexao();
+                clConexao.obterConexao();
                 cmd.ExecuteNonQuery();
                 CarregaDgvCliente();
                 MessageBox.Show("Registro atualizado com sucesso!", "Atualizar Registro", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Conexao.fecharConexao();
+                clConexao.fecharConexao();
                 txtCpf.Text = "";
                 txtNome.Text = "";
                 txtEndereco.Text = "";
@@ -126,16 +133,16 @@ namespace LojaCL
         {
             try
             {
-                SqlConnection con = Conexao.obterConexao();
+                SqlConnection con = clConexao.obterConexao();
                 SqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "Excluir";
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@cpf", this.txtCpf.Text);
-                Conexao.obterConexao();
+                clConexao.obterConexao();
                 cmd.ExecuteNonQuery();
                 CarregaDgvCliente();
                 MessageBox.Show("Registro apagado com sucesso!", "Excluir Registro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                Conexao.fecharConexao();
+                clConexao.fecharConexao();
                 txtCpf.Text = "";
                 txtNome.Text = "";
                 txtEndereco.Text = "";

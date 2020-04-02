@@ -149,7 +149,6 @@
             this.txtValor.Name = "txtValor";
             this.txtValor.Size = new System.Drawing.Size(100, 20);
             this.txtValor.TabIndex = 10;
-            this.txtValor.TextChanged += new System.EventHandler(this.txtValor_TextChanged);
             // 
             // txtValorTotal
             // 
@@ -158,7 +157,6 @@
             this.txtValorTotal.Name = "txtValorTotal";
             this.txtValorTotal.Size = new System.Drawing.Size(100, 20);
             this.txtValorTotal.TabIndex = 11;
-            this.txtValorTotal.TextChanged += new System.EventHandler(this.txtValorTotal_TextChanged);
             // 
             // btnNovoItem
             // 
