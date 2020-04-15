@@ -10,7 +10,7 @@ namespace LojaCL
 {
     class Conexao
     {
-        private static string str = "Data Source = (LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\leo-s\\Desktop\\LojaCL\\DbLoja.mdf;Integrated Security = True;MultipleActiveResultSets=True; Connect Timeout = 30";
+        private static string str = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Programas\\LojaCL\\DbLoja.mdf;Integrated Security=True;MultipleActiveResultSets=True;Connect Timeout=30";
         private static SqlConnection con = null;
         public static SqlConnection obterConexao()
         {

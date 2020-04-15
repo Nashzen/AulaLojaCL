@@ -33,13 +33,13 @@ namespace LojaCL
         {
             try
             {
-                SqlConnection con = clConexao.obterConexao();
+                SqlConnection con = Conexao.obterConexao();
                 String query = "select * from cliente";
                 SqlCommand cmd = new SqlCommand(query, con);
-                clConexao.obterConexao();
+                Conexao.obterConexao();
                 DataSet ds = new DataSet();
                 MessageBox.Show("Conectado ao Banco de Dados com Sucesso!", "Teste de Conexão", MessageBoxButtons.OK, MessageBoxIcon.Information) ;
-                clConexao.fecharConexao();
+                Conexao.fecharConexao();
             }
             catch (Exception er)
             {
@@ -63,11 +63,6 @@ namespace LojaCL
         {
             FrmCrudUsuario usu = new FrmCrudUsuario();
             usu.Show();
-        }
-
-        private void FrmPrincipal_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

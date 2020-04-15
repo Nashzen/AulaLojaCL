@@ -13,7 +13,7 @@ namespace LojaCL
 {
     public partial class FrmVenda : Form
     {
-        SqlConnection con = clConexao.obterConexao();
+        SqlConnection con = Conexao.obterConexao();
         public FrmVenda()
         {
             InitializeComponent();
@@ -23,7 +23,7 @@ namespace LojaCL
         {
             string cli = "select cpf, nome from cliente";
             SqlCommand cmd = new SqlCommand(cli, con);
-            clConexao.obterConexao();
+            Conexao.obterConexao();
             cmd.CommandType = CommandType.Text;
             SqlDataAdapter da = new SqlDataAdapter(cli, con);
             DataSet ds = new DataSet();
@@ -31,14 +31,14 @@ namespace LojaCL
             cbxCliente.ValueMember = "cpf";
             cbxCliente.DisplayMember = "nome";
             cbxCliente.DataSource = ds.Tables["nome"];
-            clConexao.fecharConexao();
+            Conexao.fecharConexao();
         } 
 
         public void CarregacbxProduto()
         {
             string pro = "select Id, nome from produto";
             SqlCommand cmd = new SqlCommand(pro, con);
-            clConexao.obterConexao();
+            Conexao.obterConexao();
             cmd.CommandType = CommandType.Text;
             SqlDataAdapter da = new SqlDataAdapter(pro, con);
             DataSet ds = new DataSet();
@@ -46,7 +46,7 @@ namespace LojaCL
             cbxProduto.ValueMember = "Id";
             cbxProduto.DisplayMember = "nome";
             cbxProduto.DataSource = ds.Tables["nome"];
-            clConexao.fecharConexao();
+            Conexao.fecharConexao();
         }
         
          private void btnSair_Click(object sender, EventArgs e)
@@ -89,21 +89,21 @@ namespace LojaCL
 
         private void cbxProduto_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SqlConnection con = clConexao.obterConexao();
+            SqlConnection con = Conexao.obterConexao();
             SqlCommand cmd = new SqlCommand("LocalizarProduto", con);
             cmd.Parameters.AddWithValue("@Id", cbxProduto.SelectedValue);
             cmd.CommandType = CommandType.StoredProcedure;
-            clConexao.obterConexao();
+            Conexao.obterConexao();
             SqlDataReader rd = cmd.ExecuteReader();
             if (rd.Read())
             {
                 txtValor.Text = rd["valor"].ToString();
                 txtId.Text = rd["Id"].ToString();
-                clConexao.fecharConexao();
+                Conexao.fecharConexao();
             } else
             {
                 MessageBox.Show("Nenhum registro encontrado!", "Erro de Registro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                clConexao.fecharConexao();
+                Conexao.fecharConexao();
             }
         }
 
@@ -168,10 +168,10 @@ namespace LojaCL
 
         private void btnFinalizar_Click(object sender, EventArgs e)
         {
-            SqlConnection con = clConexao.obterConexao();
+            SqlConnection con = Conexao.obterConexao();
             SqlCommand cmd = new SqlCommand("InserirVenda", con);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@valor_pago", SqlDbType.Decimal).Value = Convert.ToDecimal(txtValor.Text);
+            cmd.Parameters.AddWithValue("@valor_pago", SqlDbType.Decimal).Value = Convert.ToDecimal(txtValorTotal.Text);
             cmd.Parameters.AddWithValue("@id_cliente", SqlDbType.NChar).Value = cbxCliente.SelectedValue;
             cmd.ExecuteNonQuery();
             string idvenda = "select IDENT_CURRENT('venda') as id_venda";
@@ -192,10 +192,10 @@ namespace LojaCL
                 cmditens.Parameters.AddWithValue("@id_venda", SqlDbType.Int).Value = idvenda2;
                 cmditens.Parameters.AddWithValue("@valor", SqlDbType.Decimal).Value = Convert.ToDecimal(dr.Cells[3].Value);
                 cmditens.Parameters.AddWithValue("@valor_total", SqlDbType.Decimal).Value = Convert.ToDecimal(dr.Cells[4].Value);
-                clConexao.obterConexao();
+                Conexao.obterConexao();
                 cmditens.ExecuteNonQuery();
                 cmditemvenda.ExecuteNonQuery();
-                clConexao.fecharConexao();
+                Conexao.fecharConexao();
             }
             MessageBox.Show("Venda realizada com sucesso!", "Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
             cbxProduto.Text = "";
@@ -217,7 +217,7 @@ namespace LojaCL
 
         private void txtQuantidade_Leave(object sender, EventArgs e)
         {
-            SqlConnection con = clConexao.obterConexao();
+            SqlConnection con = Conexao.obterConexao();
             SqlCommand cmd = new SqlCommand("LocalizarProduto", con);
             cmd.Parameters.AddWithValue("@Id", cbxProduto.SelectedValue);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -230,7 +230,7 @@ namespace LojaCL
                 if (valor1 > valor2)
                 {
                     MessageBox.Show("Não possui quantidade suficiente em estoque!", "Estoque", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    clConexao.fecharConexao();
+                    Conexao.fecharConexao();
                     txtQuantidade.Text = "";
                     txtQuantidade.Focus();
                 }

@@ -13,9 +13,15 @@ namespace LojaCL
 {
     public partial class FrmLogin : Form
     {
+        //Os mnétodos da classe Cripto tem um parametro agora b.
+        private Cripto b;
+        //Inicializo a conexao com o bd pela classe de conexao criada.
+        SqlConnection con = Conexao.obterConexao();
         public FrmLogin()
         {
             InitializeComponent();
+            //Instancio os métodos da classe Cripto.
+            b = new Cripto();
         }
 
         private void btnSair_Click(object sender, EventArgs e)
@@ -25,11 +31,13 @@ namespace LojaCL
 
         private void btnLogar_Click(object sender, EventArgs e)
         {
-            SqlConnection con = clConexao.obterConexao();
+            SqlConnection con = Conexao.obterConexao();
             string usu = "select login,senha from usuario where login=@login and senha=@senha";
             SqlCommand cmd = new SqlCommand(usu, con);
             cmd.Parameters.AddWithValue("@login", SqlDbType.NChar).Value = txtLogin.Text.Trim();
-            cmd.Parameters.AddWithValue("@senha", SqlDbType.NChar).Value = txtSenha.Text.Trim();
+            //txtSenha.Text = b.Base64Encode(txtSenha.Text);
+            //string criptografada = txtSenha.Text;
+            cmd.Parameters.AddWithValue("@senha", SqlDbType.NChar).Value = txtSenha.Text;
             Conexao.obterConexao();
             cmd.CommandType = CommandType.Text;
             SqlDataReader usuario = cmd.ExecuteReader();
@@ -38,7 +46,7 @@ namespace LojaCL
                 this.Hide();
                 FrmPrincipal pri = new FrmPrincipal();
                 pri.Show();
-                clConexao.fecharConexao();
+                Conexao.fecharConexao();
             } else
             {
                 MessageBox.Show("Login ou senha incorretos! Tente novamente!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);

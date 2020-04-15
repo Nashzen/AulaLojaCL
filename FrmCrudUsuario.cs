@@ -13,23 +13,26 @@ namespace LojaCL
 {
     public partial class FrmCrudUsuario : Form
     {
+        private Cripto b;
+        SqlConnection con = Conexao.obterConexao();
         public FrmCrudUsuario()
         {
             InitializeComponent();
+            b = new Cripto();
         }
 
         public void CarregaDgvUsuario()
         {
-            SqlConnection con = clConexao.obterConexao();
+            SqlConnection con = Conexao.obterConexao();
             String query = "select * from usuario";
             SqlCommand cmd = new SqlCommand(query, con);
-            clConexao.obterConexao();
+            Conexao.obterConexao();
             cmd.CommandType = CommandType.Text;
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable produto = new DataTable();
             da.Fill(produto);
             DgvUsuario.DataSource = produto;
-            clConexao.fecharConexao();
+            Conexao.fecharConexao();
         }
 
         private void btnSair_Click(object sender, EventArgs e)
@@ -47,12 +50,17 @@ namespace LojaCL
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@nome", txtNome.Text);
                 cmd.Parameters.AddWithValue("@login", txtLogin.Text);
-                cmd.Parameters.AddWithValue("@senha", txtSenha.Text);
-                clConexao.obterConexao();
+                //Pego o valor o txtSenha e codifico ela.
+                txtSenha.Text = b.Base64Encode(txtSenha.Text);
+                //Crio uma nova varialvel e atribuo o txtSenha a ela.
+                string criptografada = txtSenha.Text;
+                //Passo para o parametro gravar a senha decodificada.
+                cmd.Parameters.AddWithValue("@senha", criptografada);
+                Conexao.obterConexao();
                 cmd.ExecuteNonQuery();
                 CarregaDgvUsuario();
                 MessageBox.Show("Registro inserido com sucesso!", "Cadastro", MessageBoxButtons.OK);
-                clConexao.fecharConexao();
+                Conexao.fecharConexao();
                 txtId.Text = "";
                 txtNome.Text = "";
                 txtLogin.Text = "";
@@ -68,7 +76,7 @@ namespace LojaCL
         {
             try
             {
-                SqlConnection con = clConexao.obterConexao();
+                SqlConnection con = Conexao.obterConexao();
                 SqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "AtualizarUsuario";
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -76,11 +84,11 @@ namespace LojaCL
                 cmd.Parameters.AddWithValue("@nome", this.txtNome.Text);
                 cmd.Parameters.AddWithValue("@login", this.txtLogin.Text);
                 cmd.Parameters.AddWithValue("@senha", this.txtSenha.Text);
-                clConexao.obterConexao();
+                Conexao.obterConexao();
                 cmd.ExecuteNonQuery();
                 CarregaDgvUsuario();
                 MessageBox.Show("Registro atualizado com sucesso!", "Atualizar Registro", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                clConexao.fecharConexao();
+                Conexao.fecharConexao();
                 txtId.Text = "";
                 txtNome.Text = "";
                 txtLogin.Text = "";
@@ -96,16 +104,16 @@ namespace LojaCL
         {
             try
             {
-                SqlConnection con = clConexao.obterConexao();
+                SqlConnection con = Conexao.obterConexao();
                 SqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "ExcluirUsuario";
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Id", this.txtId.Text);
-                clConexao.obterConexao();
+                Conexao.obterConexao();
                 cmd.ExecuteNonQuery();
                 CarregaDgvUsuario();
                 MessageBox.Show("Registro apagado com sucesso!", "Excluir Registro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                clConexao.fecharConexao();
+                Conexao.fecharConexao();
                 txtId.Text = "";
                 txtNome.Text = "";
                 txtLogin.Text = "";
@@ -121,12 +129,12 @@ namespace LojaCL
         {
             try
             {
-                SqlConnection con = clConexao.obterConexao();
+                SqlConnection con = Conexao.obterConexao();
                 SqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "LocalizarUsuario";
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Id", this.txtId.Text);
-                clConexao.obterConexao();
+                Conexao.obterConexao();
                 SqlDataReader rd = cmd.ExecuteReader();
                 if (rd.Read())
                 {
@@ -134,12 +142,12 @@ namespace LojaCL
                     txtNome.Text = rd["nome"].ToString();
                     txtLogin.Text = rd["login"].ToString();
                     txtSenha.Text = rd["senha"].ToString();
-                    clConexao.fecharConexao();
+                    Conexao.fecharConexao();
                 }
                 else
                 {
                     MessageBox.Show("Nenhum registro encontrado!", "Sem registro!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    clConexao.fecharConexao();
+                    Conexao.fecharConexao();
                 }
             }
             finally
