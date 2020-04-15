@@ -40,6 +40,7 @@
             this.testarBancoDeDadosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sairToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dgvPriPedi = new System.Windows.Forms.DataGridView();
+            this.cartaoDeVendaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPriPedi)).BeginInit();
             this.SuspendLayout();
@@ -62,7 +63,8 @@
             this.cadastrosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clientesToolStripMenuItem,
             this.produtosToolStripMenuItem,
-            this.usuáriosToolStripMenuItem});
+            this.usuáriosToolStripMenuItem,
+            this.cartaoDeVendaToolStripMenuItem});
             this.cadastrosToolStripMenuItem.Name = "cadastrosToolStripMenuItem";
             this.cadastrosToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.cadastrosToolStripMenuItem.Text = "&Cadastros";
@@ -70,21 +72,21 @@
             // clientesToolStripMenuItem
             // 
             this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
-            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clientesToolStripMenuItem.Text = "Clientes";
             this.clientesToolStripMenuItem.Click += new System.EventHandler(this.clientesToolStripMenuItem_Click);
             // 
             // produtosToolStripMenuItem
             // 
             this.produtosToolStripMenuItem.Name = "produtosToolStripMenuItem";
-            this.produtosToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.produtosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.produtosToolStripMenuItem.Text = "Produtos";
             this.produtosToolStripMenuItem.Click += new System.EventHandler(this.produtosToolStripMenuItem_Click);
             // 
             // usuáriosToolStripMenuItem
             // 
             this.usuáriosToolStripMenuItem.Name = "usuáriosToolStripMenuItem";
-            this.usuáriosToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.usuáriosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.usuáriosToolStripMenuItem.Text = "Usuários";
             this.usuáriosToolStripMenuItem.Click += new System.EventHandler(this.usuáriosToolStripMenuItem_Click);
             // 
@@ -130,12 +132,19 @@
             this.dgvPriPedi.AllowUserToAddRows = false;
             this.dgvPriPedi.AllowUserToDeleteRows = false;
             this.dgvPriPedi.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvPriPedi.Location = new System.Drawing.Point(29, 56);
+            this.dgvPriPedi.Location = new System.Drawing.Point(12, 41);
             this.dgvPriPedi.Name = "dgvPriPedi";
             this.dgvPriPedi.ReadOnly = true;
-            this.dgvPriPedi.Size = new System.Drawing.Size(567, 267);
+            this.dgvPriPedi.Size = new System.Drawing.Size(525, 209);
             this.dgvPriPedi.TabIndex = 1;
             this.dgvPriPedi.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPriPedi_CellClick);
+            // 
+            // cartaoDeVendaToolStripMenuItem
+            // 
+            this.cartaoDeVendaToolStripMenuItem.Name = "cartaoDeVendaToolStripMenuItem";
+            this.cartaoDeVendaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cartaoDeVendaToolStripMenuItem.Text = "Cartao de Venda";
+            this.cartaoDeVendaToolStripMenuItem.Click += new System.EventHandler(this.cartaoDeVendaToolStripMenuItem_Click);
             // 
             // FrmPrincipal
             // 
@@ -171,6 +180,7 @@
         private System.Windows.Forms.ToolStripMenuItem vendasToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem usuáriosToolStripMenuItem;
         private System.Windows.Forms.DataGridView dgvPriPedi;
+        private System.Windows.Forms.ToolStripMenuItem cartaoDeVendaToolStripMenuItem;
     }
 }
 

@@ -18,28 +18,27 @@ namespace LojaCL
             InitializeComponent();
         }
 
-        public void CarregadgvPriPedi()
+        public void CarregadgvPriPedi() 
         {
             SqlConnection con = Conexao.obterConexao();
             String query = "select * from cartaovenda";
             SqlCommand cmd = new SqlCommand(query, con);
             Conexao.obterConexao();
             cmd.CommandType = CommandType.Text;
-            //SQLdataadapter
+            //Usa para prencher DataTable
             SqlDataAdapter da = new SqlDataAdapter(cmd);
-            //adiciona datatable
+            //Adiciona um DataTable carregado em memória
             DataTable cartao = new DataTable();
             da.Fill(cartao);
-            //fonte de dados
             dgvPriPedi.DataSource = cartao;
-            //definir nome das props
+            //Quando for criar um controle em tempo de execução é muito importante atribuir um nome pare ele, e também definir as principais propriedades dele
             DataGridViewButtonColumn fechar = new DataGridViewButtonColumn();
             fechar.Name = "FecharConta";
             fechar.HeaderText = "Fechar Conta";
-            fechar.Text = "Fechar conta";
+            fechar.Text = "Fechar Conta";
             fechar.UseColumnTextForButtonValue = true;
-            int columnIndex = 4;
-            dgvPriPedi.Columns.Insert(columnIndex, fechar);
+            int columIndex = 4;
+            dgvPriPedi.Columns.Insert(columIndex, fechar);
             Conexao.fecharConexao();
             dgvPriPedi.CellClick += dgvPriPedi_CellClick;
             int colunas = dgvPriPedi.Columns.Count;
@@ -105,20 +104,25 @@ namespace LojaCL
         {
             try
             {
-                if(e.ColumnIndex == dgvPriPedi.Columns["FecharConta"].Index)
+                if (e.ColumnIndex == dgvPriPedi.Columns["FecharConta"].Index)
                 {
-                    if(Application.OpenForms["FrmVenda"] == null)
+                    if(Application.OpenForms["FrmVenda"] == null) 
                     {
                         FrmVenda ven = new FrmVenda();
                         ven.Show();
                     }
                 }
             }
-            catch (Exception)
+            catch
             {
 
-                throw;
             }
+        }
+
+        private void cartaoDeVendaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmCrudCartaoVenda cv = new FrmCrudCartaoVenda();
+            cv.Show();
         }
     }
 }

@@ -35,9 +35,9 @@ namespace LojaCL
             string usu = "select login,senha from usuario where login=@login and senha=@senha";
             SqlCommand cmd = new SqlCommand(usu, con);
             cmd.Parameters.AddWithValue("@login", SqlDbType.NChar).Value = txtLogin.Text.Trim();
-            //txtSenha.Text = b.Base64Encode(txtSenha.Text);
-            //string criptografada = txtSenha.Text;
-            cmd.Parameters.AddWithValue("@senha", SqlDbType.NChar).Value = txtSenha.Text;
+            txtSenha.Text = b.Base64Encode(txtSenha.Text);
+            string criptografada = txtSenha.Text;
+            cmd.Parameters.AddWithValue("@senha", SqlDbType.NChar).Value = criptografada;
             Conexao.obterConexao();
             cmd.CommandType = CommandType.Text;
             SqlDataReader usuario = cmd.ExecuteReader();
