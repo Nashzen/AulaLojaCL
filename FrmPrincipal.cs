@@ -18,6 +18,37 @@ namespace LojaCL
             InitializeComponent();
         }
 
+        public void CarregadgvPriPedi()
+        {
+            SqlConnection con = Conexao.obterConexao();
+            String query = "select * from cartaovenda";
+            SqlCommand cmd = new SqlCommand(query, con);
+            Conexao.obterConexao();
+            cmd.CommandType = CommandType.Text;
+            //SQLdataadapter
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            //adiciona datatable
+            DataTable cartao = new DataTable();
+            da.Fill(cartao);
+            //fonte de dados
+            dgvPriPedi.DataSource = cartao;
+            //definir nome das props
+            DataGridViewButtonColumn fechar = new DataGridViewButtonColumn();
+            fechar.Name = "FecharConta";
+            fechar.HeaderText = "Fechar Conta";
+            fechar.Text = "Fechar conta";
+            fechar.UseColumnTextForButtonValue = true;
+            int columnIndex = 4;
+            dgvPriPedi.Columns.Insert(columnIndex, fechar);
+            Conexao.fecharConexao();
+            dgvPriPedi.CellClick += dgvPriPedi_CellClick;
+            int colunas = dgvPriPedi.Columns.Count;
+            if(colunas > 5)
+            {
+                dgvPriPedi.Columns.Remove("FecharConta");
+            }
+        }
+
         private void sairToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Environment.Exit(0);
@@ -63,6 +94,31 @@ namespace LojaCL
         {
             FrmCrudUsuario usu = new FrmCrudUsuario();
             usu.Show();
+        }
+
+        private void FrmPrincipal_Load(object sender, EventArgs e)
+        {
+            CarregadgvPriPedi();
+        }
+
+        private void dgvPriPedi_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if(e.ColumnIndex == dgvPriPedi.Columns["FecharConta"].Index)
+                {
+                    if(Application.OpenForms["FrmVenda"] == null)
+                    {
+                        FrmVenda ven = new FrmVenda();
+                        ven.Show();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }
