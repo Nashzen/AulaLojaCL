@@ -46,14 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Conexao.cs" />
-    <Compile Include="Cripto.cs" />
-    <Compile Include="FrmCrudCartaoVenda.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmCrudCartaoVenda.Designer.cs">
-      <DependentUpon>FrmCrudCartaoVenda.cs</DependentUpon>
-    </Compile>
     <Compile Include="FrmCrudCliente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,18 +57,6 @@
     </Compile>
     <Compile Include="FrmCrudProduto.Designer.cs">
       <DependentUpon>FrmCrudProduto.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmCrudUsuario.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmCrudUsuario.Designer.cs">
-      <DependentUpon>FrmCrudUsuario.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmLogin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmLogin.Designer.cs">
-      <DependentUpon>FrmLogin.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmPrincipal.cs">
       <SubType>Form</SubType>
@@ -92,20 +72,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FrmCrudCartaoVenda.resx">
-      <DependentUpon>FrmCrudCartaoVenda.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FrmCrudCliente.resx">
       <DependentUpon>FrmCrudCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCrudProduto.resx">
       <DependentUpon>FrmCrudProduto.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmCrudUsuario.resx">
-      <DependentUpon>FrmCrudUsuario.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmLogin.resx">
-      <DependentUpon>FrmLogin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmPrincipal.resx">
       <DependentUpon>FrmPrincipal.cs</DependentUpon>

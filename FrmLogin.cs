@@ -2,26 +2,26 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 
 namespace LojaCL
 {
     public partial class FrmLogin : Form
     {
-        //Os mnétodos da classe Cripto tem um parametro agora b.
-        private Cripto b;
-        //Inicializo a conexao com o bd pela classe de conexao criada.
-        SqlConnection con = Conexao.obterConexao();
+        SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\carla\\Desktop\\LojaChingLing-master\\DbLoja.mdf;Integrated Security=True;Connect Timeout=30");
         public FrmLogin()
         {
             InitializeComponent();
-            //Instancio os métodos da classe Cripto.
-            b = new Cripto();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void btnSair_Click(object sender, EventArgs e)
@@ -31,14 +31,13 @@ namespace LojaCL
 
         private void btnLogar_Click(object sender, EventArgs e)
         {
-            SqlConnection con = Conexao.obterConexao();
-            string usu = "select login,senha from usuario where login=@login and senha=@senha";
+            String str = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\carla\\Desktop\\LojaChingLing-master\\DbLoja.mdf;Integrated Security=True;Connect Timeout=30";
+            string usu = "select login, senha from usuario where login=@login and senha=@senha";
+            SqlConnection con = new SqlConnection(str);
             SqlCommand cmd = new SqlCommand(usu, con);
             cmd.Parameters.AddWithValue("@login", SqlDbType.NChar).Value = txtLogin.Text.Trim();
-            txtSenha.Text = b.Base64Encode(txtSenha.Text);
-            string criptografada = txtSenha.Text;
-            cmd.Parameters.AddWithValue("@senha", SqlDbType.NChar).Value = criptografada;
-            Conexao.obterConexao();
+            cmd.Parameters.AddWithValue("@senha", SqlDbType.NChar).Value = txtSenha.Text.Trim();
+            con.Open();
             cmd.CommandType = CommandType.Text;
             SqlDataReader usuario = cmd.ExecuteReader();
             if (usuario.HasRows)
@@ -46,19 +45,20 @@ namespace LojaCL
                 this.Hide();
                 FrmPrincipal pri = new FrmPrincipal();
                 pri.Show();
-                Conexao.fecharConexao();
-            } else
+                con.Close();
+            }
+            else
             {
-                MessageBox.Show("Login ou senha incorretos! Tente novamente!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Login ou senha incorretos! Tente novamente", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtLogin.Text = "";
                 txtSenha.Text = "";
                 con.Close();
             }
         }
 
-        private void FrmLogin_Load(object sender, EventArgs e)
+        private void txtLogin_TextChanged(object sender, EventArgs e)
         {
-            txtLogin.Focus();
+
         }
     }
 }
